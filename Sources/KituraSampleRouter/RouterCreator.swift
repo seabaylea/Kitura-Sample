@@ -187,7 +187,7 @@ public struct RouterCreator {
             }
         #endif
 
-        router.get("/articles") { _, response, next in
+        let articlesHandler = { (request: RouterRequest, response: RouterResponse, next: () -> ()) in
             defer {
                 next()
             }
@@ -206,6 +206,12 @@ public struct RouterCreator {
                 Log.error("Failed to render template \(error)")
             }
         }
+
+        router.get("/articles", handler: articlesHandler)
+
+        let subRouter = Router()
+        subRouter.get("/articles", handler: articlesHandler)
+        router.all("/sub", middleware: subRouter)
 
         router.get("/articles_include") { _, response, next in
             defer {
