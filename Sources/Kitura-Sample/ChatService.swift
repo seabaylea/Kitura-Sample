@@ -82,7 +82,7 @@ class ChatService: WebSocketService {
         let displayName = String(message.dropFirst(2))
         
         if messageType == MessageType.sentMessage.rawValue || messageType == MessageType.startedTyping.rawValue ||
-                       messageType == MessageType.stoppedTyping.rawValue {
+            messageType == MessageType.stoppedTyping.rawValue {
             lockConnectionsLock()
             let connectionInfo = connections[from.id]
             unlockConnectionsLock()
