@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <meta charset="UTF-8">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script>
+    $(document).ready(function(){
+        $('#postButton').click(function(){
+            $.post("/books",
+            {
+              name: "Default",
+              author: "unknown",
+              rating: 5
+            },
+            function(data,status){
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+        });
+    });
+    $(document).ready(function(){
+        $('#putButton').click(function(){
+            $.ajax({
+              url: "/books/0",
+              type: 'PUT',
+              data: {
+                name: "newSample",
+                author: "unknown",
+                rating: 1
+              },
+              success: function(data,status){
+                  alert("Data: " + data + "\nStatus: " + status);
+              }
+            });
+        });
+    });
+    $(document).ready(function(){
+        $('#deleteButton').click(function(){
+            $.ajax({
+              url: "/books",
+              type: 'DELETE',
+              success: function(data,status){
+                  alert("Status: " + status);
+              }
+            });
+        });
+    });
+</script>
+   <title>Books: Codable routing</title>
+ </head>
+ <body>
+     <p>What would you like to do?</p>
+     <ul><li>
+         <p>Send an HTTP GET request to &quot;/books&quot;</p>
+         <button onclick="location.href='/books'" type="button">
+         GET &quot;/books&quot;
+         </button>
+     </li></ul>
+     <ul><li>
+         <p>Send a JSON encoded HTTP POST request to &quot;/books&quot;</p>
+         <input type="button" value="POST to &quot;/books&quot;" id="postButton" >
+     </li></ul>
+     <ul><li>
+         <p>Post a book via a HTTP POST request to &quot;/books&quot;</p>
+         <form action="/books" method="post" enctype="application/x-www-form-urlencoded">
+             Name: <input type="text" name="name" required="required"><br>
+             author: <input type="text" name="author" required="required"><br>
+             rating: <input type="number" name="rating" required="required" min="1" max="5"><br>
+             <input type="submit" value="Submit">
+         </form>
+     </li></ul>
+     <ul><li>
+         <p>get a book via a HTTP GET request with query params to &quot;/books&quot;</p>
+         <form action="/books" method="get" enctype="application/x-www-form-urlencoded">
+             Name: <input type="text" name="name" required="required"><br>
+             <input type="submit" value="Submit">
+         </form>
+     </li></ul>
+     <ul><li>
+         <p>Send a JSON encoded HTTP PUT request to &quot;/books&quot;</p>
+         <input type="button" value="PUT to &quot;/books&quot;" id="putButton" >
+     </li></ul>
+     <ul><li>
+         <p>Send a HTTP DELETE request to &quot;/books&quot;</p>
+         <input type="button" value="DELETE to &quot;/books&quot;" id="deleteButton" >
+     </li></ul>
+ </body>
+</html>

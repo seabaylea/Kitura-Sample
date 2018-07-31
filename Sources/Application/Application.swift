@@ -30,10 +30,16 @@ public let health = Health()
 public class App {
     let router = Router()
     let cloudEnv = CloudEnv()
+<<<<<<< HEAD
     let nameSemaphore = DispatchSemaphore(value: 1)
     var name: String?
     let bookSemaphore = DispatchSemaphore(value: 1)
     var bookStore: [Book] = [Book(name: "Sample", author: "zzz", rating: 5)!]
+=======
+    let workerQueue = DispatchQueue(label: "worker")
+    var bookStore: [Book] = [Book(name: "sample", author: "author", rating: 5)!]
+
+>>>>>>> added sessions and authentication
     
     public init() throws {
         // Run the metrics initializer
@@ -44,14 +50,15 @@ public class App {
     func postInit() throws {
         // Endpoints
         initializeHelloRoutes(app: self)
-        initializeMultiHandlerRoutes(app: self)
+        initializeAdvancedRoutes(app: self)
         initializeStencilRoutes(app: self)
         initializeMarkdownRoutes(app: self)
         initializeErrorRoutes(app: self)
         initializeCodableRoutes(app: self)
+        initializeTypeSafeAuthRoutes(app: self)
+        initializeTypeSafeSessionsRoutes(app: self)
         initializeHealthRoutes(app: self)
         initializeStaticFileServers(app: self)
-        initializeMiscRoutes(app: self)
         initializeNotFoundRoute(app: self)
     }
     

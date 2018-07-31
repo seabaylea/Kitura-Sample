@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <meta charset="UTF-8">
+   <title>Sessions</title>
+ </head>
+ <body>
+     <p>What would you like to do?</p>
+     <ul><li>
+         <p>Send an HTTP GET request to &quot;/session&quot;</p>
+         <button onclick="location.href='/session'" type="button">
+         GET &quot;/session&quot;
+         </button>
+     </li></ul>
+     <ul><li>
+         <p>Send a URL encoded HTTP POST request to &quot;/session&quot;</p>
+         <form action="/session" method="post" enctype="application/x-www-form-urlencoded">
+             Name: <input type="text" name="name" required="required"><br>
+             author: <input type="text" name="author" required="required"><br>
+             rating: <input type="number" name="rating" required="required" min="1" max="5"><br>
+             <input type="submit" value="Submit">
+         </form>
+     </li></ul>
+     <ul><li>
+         <p>Send an HTTP GET request to &quot;/rawsession&quot;</p>
+         <button onclick="location.href='/rawsession'" type="button">
+         GET &quot;/rawsession&quot;
+         </button>
+     </li></ul>
+     <ul><li>
+         <p>Send a URL encoded HTTP POST request to &quot;/rawsession&quot;</p>
+         <form action="/rawsession" method="post" enctype="application/x-www-form-urlencoded">
+             Name: <input type="text" name="name" required="required"><br>
+             author: <input type="text" name="author" required="required"><br>
+             rating: <input type="number" name="rating" required="required" min="1" max="5"><br>
+             <input type="submit" value="Submit">
+         </form>
+     </li></ul>
+ </body>
+</html>

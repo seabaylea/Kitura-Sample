@@ -19,6 +19,7 @@ import KituraContracts
 func initializeCodableRoutes(app: App) {
     
    //Codable route for post
+<<<<<<< HEAD
     app.router.post("/books", handler: app.persistBookHandler)
 
     //Codable route for get with and without parameters
@@ -51,5 +52,49 @@ extension App {
         let safeBooks = bookStore
         nameSemaphore.signal()
         return safeBooks
+=======
+    app.router.get("/books", handler: app.queryGetHandler)
+    app.router.post("/books", handler: app.postBookHandler)
+    app.router.put("/books", handler: app.putBookHandler)
+    app.router.delete("/books", handler: app.deleteAllBookHandler)
+}
+
+extension App {
+    func queryGetHandler(query: BookQuery, respondWith: ([Book]?, RequestError?) -> Void) {
+        // Filter data using query parameters provided to the application
+        if let bookName = query.name {
+            let books = bookStore.filter { $0.name == bookName }
+            return respondWith(books, nil)
+        } else {
+            return respondWith(bookStore, nil)
+        }
+    }
+
+    func postBookHandler(book: Book, completion: (Book?, RequestError?) -> Void ) {
+        execute {
+            bookStore.append(book)
+        }
+        completion(book, nil)
+    }
+
+    func putBookHandler(bookIndex: Int, book: Book, completion: (Book?, RequestError?) -> Void ) {
+        execute {
+            bookStore[bookIndex] = book
+        }
+        completion(bookStore[bookIndex], nil)
+    }
+
+    func deleteAllBookHandler(completion: (RequestError?) -> Void) {
+        execute {
+            bookStore = []
+        }
+        return completion(nil)
+    }
+    
+    func execute(_ block: (() -> Void)) {
+        workerQueue.sync {
+            block()
+        }
+>>>>>>> added sessions and authentication
     }
 }

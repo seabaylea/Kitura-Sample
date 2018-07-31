@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <meta charset="UTF-8">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script>
+    $(document).ready(function(){
+        $('#postButton').click(function(){
+            $.post("/hello",
+            {
+              name: "Default"
+            },
+            function(data,status){
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+        });
+    });
+    $(document).ready(function(){
+        $('#putButton').click(function(){
+            $.ajax({
+              url: "/hello",
+              type: 'PUT',
+              data: {
+                name: "Default"
+              },
+              success: function(data,status){
+                  alert("Data: " + data + "\nStatus: " + status);
+              }
+            });
+        });
+    });
+    $(document).ready(function(){
+        $('#deleteButton').click(function(){
+            $.ajax({
+              url: "/hello",
+              type: 'DELETE',
+              success: function(data,status){
+                  alert("Data: " + data + "\nStatus: " + status);
+              }
+            });
+        });
+    });
+</script>
+   <title>Hello: Raw routing</title>
+ </head>
+ <body>
+     <p>What would you like to do?</p>
+     <ul><li>
+         <p>Send an HTTP GET request to &quot;/hello&quot;</p>
+         <button onclick="location.href='/hello'" type="button">
+         GET &quot;/hello&quot;
+         </button>
+     </li></ul>
+     <ul><li>
+         <p>Send a JSON encoded HTTP POST request to &quot;/hello&quot;</p>
+         <input type="button" value="POST to &quot;/hello&quot;" id="postButton" >
+     </li></ul>
+     <ul><li>
+         <p>Send a URL encoded HTTP POST request to &quot;/hello&quot;</p>
+         <form action="/hello" method="post" enctype="application/x-www-form-urlencoded">
+             Name: <input type="text" name="name" required="required"><br>
+             <input type="submit" value="Submit">
+         </form>
+     </li></ul>
+     <ul><li>
+         <p>Send a JSON encoded HTTP PUT request to &quot;/hello&quot;</p>
+         <input type="button" value="PUT to &quot;/hello&quot;" id="putButton" >
+     </li></ul>
+     <ul><li>
+         <p>Send a HTTP DELETE request to &quot;/hello&quot;</p>
+         <input type="button" value="DELETE to &quot;/hello&quot;" id="deleteButton" >
+     </li></ul>
+ </body>
+</html>
