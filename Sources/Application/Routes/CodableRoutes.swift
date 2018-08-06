@@ -19,31 +19,37 @@ import KituraContracts
 func initializeCodableRoutes(app: App) {
     
    //Codable route for post
-    app.router.post("/books", handler: persistBookHandler)
+    app.router.post("/books", handler: app.persistBookHandler)
 
     //Codable route for get with and without parameters
-    app.router.get("/books") { (query: BookQuery, respondWith: ([Book]?, RequestError?) -> Void) in
-        // Filter data using query parameters provided to the application
-        var books: [Book]
-        if let bookName = query.name {
-            books = bookStore.map({ $0.value }).filter( {
-                ( $0.name == bookName )
-            })
-        } else {
-            books = bookStore.map({ $0.value })
-        }
-        if books.count == 0 {
-            let book = Book(name: "Sample", author: "zzz", rating: 5)
-            books = [book!]
-        }
-        // Return list of books
-        respondWith(books, nil)
-    }
+    app.router.get("/books", handler: app.queryGetHandler)
 }
-
-var bookStore: [String: Book] = [:]
-
-func persistBookHandler(book: Book, completion: (Book?, RequestError?) -> Void ) {
-    bookStore[book.name] = book
-    completion(bookStore[book.name], nil)
+extension App {
+    func persistBookHandler(book: Book, completion: (Book?, RequestError?) -> Void ) {
+        addBook(book)
+        completion(book, nil)
+    }
+    
+    func queryGetHandler(query: BookQuery, respondWith: ([Book]?, RequestError?) -> Void) {
+        // Filter data using query parameters provided to the application
+        if let bookName = query.name {
+            let books = getBooks().filter { $0.name == bookName }
+            return respondWith(books, nil)
+        } else {
+            return respondWith(getBooks(), nil)
+        }
+    }
+    
+    func addBook(_ book: Book) {
+        bookSemaphore.wait()
+        bookStore.append(book)
+        bookSemaphore.signal()
+    }
+    
+    func getBooks() -> [Book] {
+        bookSemaphore.wait()
+        let safeBooks = bookStore
+        nameSemaphore.signal()
+        return safeBooks
+    }
 }

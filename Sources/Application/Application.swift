@@ -22,6 +22,7 @@ import CloudEnvironment
 import KituraContracts
 import Health
 import KituraOpenAPI
+import Dispatch
 
 public let projectPath = ConfigurationManager.BasePath.project.path
 public let health = Health()
@@ -29,6 +30,10 @@ public let health = Health()
 public class App {
     let router = Router()
     let cloudEnv = CloudEnv()
+    let nameSemaphore = DispatchSemaphore(value: 1)
+    var name: String?
+    let bookSemaphore = DispatchSemaphore(value: 1)
+    var bookStore: [Book] = [Book(name: "Sample", author: "zzz", rating: 5)!]
     
     public init() throws {
         // Run the metrics initializer

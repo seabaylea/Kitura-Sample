@@ -22,7 +22,7 @@ import KituraNet
 import Dispatch
 import Foundation
 
-import KituraSampleRouter
+@testable import Application
 
 class KituraTest: XCTestCase {
     private static let initOnce: () = {
@@ -37,9 +37,16 @@ class KituraTest: XCTestCase {
     }
 
     func performServerTest(asyncTasks: (XCTestExpectation) -> Void...) {
-        let router = RouterCreator.create()
-        Kitura.addHTTPServer(onPort: 8080, with: router)
-        Kitura.start()
+        do {
+            let app = try App()
+            try app.postInit()
+            let router = app.router
+            Kitura.addHTTPServer(onPort: 8080, with: router)
+            Kitura.start()
+        } catch {
+            XCTFail("Failed to create server")
+            return
+        }
 
         let requestQueue = DispatchQueue(label: "Request queue")
 
