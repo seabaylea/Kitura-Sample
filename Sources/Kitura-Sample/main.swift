@@ -20,6 +20,7 @@ import LoggerAPI
 import HeliumLogger
 import Application
 import KituraWebSocket
+import ChatService
 
 do {
     
