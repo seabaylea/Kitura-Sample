@@ -19,40 +19,6 @@ import KituraContracts
 func initializeCodableRoutes(app: App) {
     
    //Codable route for post
-<<<<<<< HEAD
-    app.router.post("/books", handler: app.persistBookHandler)
-
-    //Codable route for get with and without parameters
-    app.router.get("/books", handler: app.queryGetHandler)
-}
-extension App {
-    func persistBookHandler(book: Book, completion: (Book?, RequestError?) -> Void ) {
-        addBook(book)
-        completion(book, nil)
-    }
-    
-    func queryGetHandler(query: BookQuery, respondWith: ([Book]?, RequestError?) -> Void) {
-        // Filter data using query parameters provided to the application
-        if let bookName = query.name {
-            let books = getBooks().filter { $0.name == bookName }
-            return respondWith(books, nil)
-        } else {
-            return respondWith(getBooks(), nil)
-        }
-    }
-    
-    func addBook(_ book: Book) {
-        bookSemaphore.wait()
-        bookStore.append(book)
-        bookSemaphore.signal()
-    }
-    
-    func getBooks() -> [Book] {
-        bookSemaphore.wait()
-        let safeBooks = bookStore
-        nameSemaphore.signal()
-        return safeBooks
-=======
     app.router.get("/books", handler: app.queryGetHandler)
     app.router.post("/books", handler: app.postBookHandler)
     app.router.put("/books", handler: app.putBookHandler)
@@ -63,38 +29,60 @@ extension App {
     func queryGetHandler(query: BookQuery, respondWith: ([Book]?, RequestError?) -> Void) {
         // Filter data using query parameters provided to the application
         if let bookName = query.name {
-            let books = bookStore.filter { $0.name == bookName }
+            let books = getBooks().filter { $0.name == bookName }
             return respondWith(books, nil)
         } else {
-            return respondWith(bookStore, nil)
+            return respondWith(getBooks(), nil)
         }
     }
 
     func postBookHandler(book: Book, completion: (Book?, RequestError?) -> Void ) {
-        execute {
-            bookStore.append(book)
-        }
+        addBook(book)
         completion(book, nil)
     }
 
     func putBookHandler(bookIndex: Int, book: Book, completion: (Book?, RequestError?) -> Void ) {
-        execute {
-            bookStore[bookIndex] = book
+        if putBook(book, index: bookIndex) {
+            completion(book, nil)
+        } else {
+            completion(nil, .badRequest)
         }
-        completion(bookStore[bookIndex], nil)
+        
     }
 
     func deleteAllBookHandler(completion: (RequestError?) -> Void) {
-        execute {
-            bookStore = []
-        }
+        deleteBooks()
         return completion(nil)
     }
-    
-    func execute(_ block: (() -> Void)) {
-        workerQueue.sync {
-            block()
+
+    func getBooks() -> [Book] {
+        bookSemaphore.wait()
+        let safeBooks = bookStore
+        nameSemaphore.signal()
+        return safeBooks
+    }
+
+    func addBook(_ book: Book) {
+        bookSemaphore.wait()
+        bookStore.append(book)
+        bookSemaphore.signal()
+    }
+
+    func putBook(_ book: Book, index: Int) -> Bool {
+        bookSemaphore.wait()
+        if bookStore.indices.contains(index) {
+            bookStore[index] = book
+            bookSemaphore.signal()
+            return true
+        } else {
+            bookSemaphore.signal()
+            return false
         }
->>>>>>> added sessions and authentication
+    }
+    
+    func deleteBooks() {
+        bookSemaphore.wait()
+        bookStore = []
+        bookSemaphore.signal()
     }
 }

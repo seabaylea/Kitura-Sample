@@ -30,16 +30,10 @@ public let health = Health()
 public class App {
     let router = Router()
     let cloudEnv = CloudEnv()
-<<<<<<< HEAD
     let nameSemaphore = DispatchSemaphore(value: 1)
-    var name: String?
+    var name: Name?
     let bookSemaphore = DispatchSemaphore(value: 1)
     var bookStore: [Book] = [Book(name: "Sample", author: "zzz", rating: 5)!]
-=======
-    let workerQueue = DispatchQueue(label: "worker")
-    var bookStore: [Book] = [Book(name: "sample", author: "author", rating: 5)!]
-
->>>>>>> added sessions and authentication
     
     public init() throws {
         // Run the metrics initializer
