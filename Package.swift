@@ -33,8 +33,9 @@ let package = Package(
         .package(url: "https://github.com/IBM-Swift/Kitura-WebSocket.git", from: "2.0.0")
     ],
     targets: [
-        .target(name: "Kitura-Sample", dependencies: [ .target(name: "Application"), "Kitura" , "HeliumLogger", "Kitura-WebSocket"]),
-        .target(name: "Application", dependencies: [ "Kitura", "CloudEnvironment","SwiftMetrics","Health", "KituraOpenAPI", "KituraMarkdown", "KituraStencil"      ]),
+        .target(name: "Kitura-Sample", dependencies: [ .target(name: "Application"), .target(name: "ChatService"), "Kitura" , "HeliumLogger"]),
+        .target(name: "Application", dependencies: [ "Kitura", "CloudEnvironment","SwiftMetrics","Health", "KituraOpenAPI", "KituraMarkdown", "KituraStencil"]),
+        .target(name: "ChatService", dependencies: ["Kitura-WebSocket"]),
       .testTarget(name: "KituraSampleRouterTests" , dependencies: [.target(name: "Application"), "Kitura","HeliumLogger" ])
     ]
 )

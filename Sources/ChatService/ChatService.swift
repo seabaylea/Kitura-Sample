@@ -21,7 +21,9 @@ import Foundation
 
 import KituraWebSocket
 
-class ChatService: WebSocketService {
+public class ChatService: WebSocketService {
+    
+    public init() {}
     
     private let connectionsLock = DispatchSemaphore(value: 1)
     
