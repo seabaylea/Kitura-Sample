@@ -39,10 +39,11 @@ class TestCodableRoutes: KituraTest {
     
     func testCodablePost() {
         let book: String = "{\"name\": \"xxx\",\"author\": \"yyy\",\"rating\": 4}"
-        let expectedBooks: [Book] = [Book(name: "Sample", author: "zzz", rating: 5), Book(name: "xxx", author: "yyy", rating: 4)]
+        let sentBook = Book(name: "xxx", author: "yyy", rating: 4)
+        let expectedBooks: [Book] = [Book(name: "Sample", author: "zzz", rating: 5), sentBook]
         performServerTest(asyncTasks: { expectation in
             self.performRequest("post", path: "/books", body: book, expectation: expectation, headers: ["Content-Type":"application/json"]) { response in
-                self.checkCodableResponse(response: response, expectedResponse: expectedBooks, expectedStatusCode: HTTPStatusCode.created)
+                self.checkCodableResponse(response: response, expectedBook: sentBook, expectedStatusCode: HTTPStatusCode.created)
                 self.performRequest("get", path: "/books", expectation: expectation, headers: ["Content-Type":"application/json"]) { response in
                     self.checkCodableResponse(response: response, expectedResponse: expectedBooks)
                     expectation.fulfill()

@@ -240,6 +240,23 @@ class KituraTest: XCTestCase {
         }
     }
     
+    func checkCodableResponse(response: ClientResponse, expectedBook: Book,
+                              expectedStatusCode: HTTPStatusCode = HTTPStatusCode.OK) {
+        XCTAssertEqual(response.statusCode, expectedStatusCode,
+                       "No success status code returned")
+        if let optionalBody = try? response.readString(), let body = optionalBody {
+            let json = body.data(using: .utf8)!
+            do {
+                let myStruct = try JSONDecoder().decode(Book.self, from: json)
+                XCTAssertTrue(myStruct == expectedBook)
+            } catch {
+                print("Error")
+            }
+        } else {
+            XCTFail("No response body")
+        }
+    }
+    
     func runTestParameter(user: String) {
         let userInPath = user.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? user
         let responseText = "<!DOCTYPE html><html><body><b>User:</b> \(user)</body></html>\n\n"
