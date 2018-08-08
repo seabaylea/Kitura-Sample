@@ -33,6 +33,7 @@ class TestSessionsRoutes: KituraTest {
             // Login to create the session and set session.sessionTestKey to be sessionTestValue
             self.performRequest("get", path: "/session", expectation: expectation, headers: ["cookie": "cookiename=cookievalue"], callback: { response in
                 self.checkCodableResponse(response: response, expectedResponse: emptyBooks)
+                expectation.fulfill()
             })
         })
     }
