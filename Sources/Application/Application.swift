@@ -50,8 +50,10 @@ public class App {
         initializeErrorRoutes(app: self)
         initializeCodableRoutes(app: self)
         initializeHealthRoutes(app: self)
-        initializeStaticFileServers(app: self)
         initializeMiscRoutes(app: self)
+		initializeJWTRoutes(app: self)
+		//Put new routes above here
+		initializeStaticFileServers(app: self)
         initializeNotFoundRoute(app: self)
     }
     
