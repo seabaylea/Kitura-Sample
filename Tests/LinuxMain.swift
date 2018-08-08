@@ -20,10 +20,6 @@ import XCTest
 
 XCTMain([
            testCase(KituraSampleTests.allTests),
-<<<<<<< HEAD
-           testCase(TestHelloRoutes.allTests)
-=======
            testCase(TestHelloRoutes.allTests),
            testCase(TestCodableRoutes.allTests)
->>>>>>> master
        ])
