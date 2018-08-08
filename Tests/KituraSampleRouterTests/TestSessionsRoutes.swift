@@ -26,6 +26,9 @@ class TestSessionsRoutes: KituraTest {
             ("testGetTypeSafeSession", testGetTypeSafeSession),
             ("testPostTypeSafeSession", testPostTypeSafeSession),
             ("testTypeSafeSessionPersistence", testTypeSafeSessionPersistence),
+            ("testGetRawSession", testGetRawSession),
+            ("testPostRawSession", testPostRawSession),
+            ("testRawSessionPersistence", testRawSessionPersistence),
         ]
     }
     

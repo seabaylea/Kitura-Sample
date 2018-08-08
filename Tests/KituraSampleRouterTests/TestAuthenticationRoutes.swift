@@ -24,6 +24,8 @@ class TestAuthenticationRoutes: KituraTest {
         return [
             ("testTypeSafeFailedAuthentication", testTypeSafeFailedAuthentication),
             ("testTypeSafeAuthentication", testTypeSafeAuthentication),
+            ("testRawFailedAuthentication", testRawFailedAuthentication),
+            ("testRawAuthentication", testRawAuthentication),
         ]
     }
     
