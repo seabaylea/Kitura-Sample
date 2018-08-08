@@ -1,6 +1,6 @@
 import KituraContracts
 import KituraSession
-func initializeTypeSafeSessionsRoutes(app: App) {
+func initializeSessionsRoutes(app: App) {
     // Codable Session
     app.router.get("/session") { (session: MySession, respondWith: ([Book]?, RequestError?) -> Void) -> Void in
         respondWith(session.books, nil)
@@ -45,6 +45,7 @@ func initializeTypeSafeSessionsRoutes(app: App) {
         let bookDict: [String: String] = ["name": inputBook.name, "author": inputBook.author, "rating": String(inputBook.rating)]
         bookData.append(bookDict)
         session["books"] = bookData
+        response.status(.created)
         response.send(inputBook)
         next()
     }

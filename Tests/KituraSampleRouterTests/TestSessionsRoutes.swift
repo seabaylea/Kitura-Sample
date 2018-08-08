@@ -70,4 +70,45 @@ class TestSessionsRoutes: KituraTest {
             })
         })
     }
+    func testGetRawSession() {
+        let emptyBooks: [Book] = []
+        performServerTest(asyncTasks: { expectation in
+            // Login to create the session and set session.sessionTestKey to be sessionTestValue
+            self.performRequest("get", path: "/rawsession", expectation: expectation, callback: { response in
+                self.checkCodableResponse(response: response, expectedResponse: emptyBooks)
+                expectation.fulfill()
+            })
+        })
+    }
+    
+    func testPostRawSession() {
+        let jsonBook: String = "{\"name\": \"bookName\",\"author\": \"bookAuthor\",\"rating\": 4}"
+        let objectBook = Book(name: "bookName", author: "bookAuthor", rating: 4)
+        performServerTest(asyncTasks: { expectation in
+            // Login to create the session and set session.sessionTestKey to be sessionTestValue
+            self.performRequest("post", path: "/rawsession", body: jsonBook, expectation: expectation, headers: ["Content-Type": "application/json"], callback: { response in
+                self.checkCodableResponse(response: response, expectedBook: objectBook, expectedStatusCode: HTTPStatusCode.created)
+                expectation.fulfill()
+            })
+        })
+    }
+    
+    func testRawSessionPersistence() {
+        let jsonBook: String = "{\"name\": \"bookName\",\"author\": \"bookAuthor\",\"rating\": 4}"
+        let objectBook = Book(name: "bookName", author: "bookAuthor", rating: 4)
+        performServerTest(asyncTasks: { expectation in
+            // Login to create the session and set session.sessionTestKey to be sessionTestValue
+            self.performRequest("post", path: "/rawsession", body: jsonBook, expectation: expectation, headers: ["Content-Type": "application/json"], callback: { response in
+                self.checkCodableResponse(response: response, expectedBook: objectBook, expectedStatusCode: HTTPStatusCode.created)
+                guard let cookie = response.headers["Set-cookie"] else {
+                    XCTFail("no set cookie recieved")
+                    return
+                }
+                self.performRequest("get", path: "/rawsession", expectation: expectation, headers: ["cookie": cookie[0], "Content-Type": "application/json"], callback: { response in
+                    self.checkCodableResponse(response: response, expectedResponse: [objectBook])
+                    expectation.fulfill()
+                })
+            })
+        })
+    }
 }
