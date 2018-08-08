@@ -34,7 +34,7 @@ class TestSessionsRoutes: KituraTest {
         performServerTest(asyncTasks: { expectation in
             // Login to create the session and set session.sessionTestKey to be sessionTestValue
             self.performRequest("get", path: "/session", expectation: expectation, callback: { response in
-                self.checkCodableResponse(response: response, expectedResponse: emptyBooks)
+                self.checkCodableResponse(response: response, expectedResponseArray: emptyBooks)
                 expectation.fulfill()
             })
         })
@@ -46,7 +46,7 @@ class TestSessionsRoutes: KituraTest {
         performServerTest(asyncTasks: { expectation in
             // Login to create the session and set session.sessionTestKey to be sessionTestValue
             self.performRequest("post", path: "/session", body: jsonBook, expectation: expectation, headers: ["Content-Type": "application/json"], callback: { response in
-                self.checkCodableResponse(response: response, expectedBook: objectBook, expectedStatusCode: HTTPStatusCode.created)
+                self.checkCodableResponse(response: response, expectedResponse: objectBook, expectedStatusCode: HTTPStatusCode.created)
                 expectation.fulfill()
             })
         })
@@ -58,13 +58,13 @@ class TestSessionsRoutes: KituraTest {
         performServerTest(asyncTasks: { expectation in
             // Login to create the session and set session.sessionTestKey to be sessionTestValue
             self.performRequest("post", path: "/session", body: jsonBook, expectation: expectation, headers: ["Content-Type": "application/json"], callback: { response in
-                self.checkCodableResponse(response: response, expectedBook: objectBook, expectedStatusCode: HTTPStatusCode.created)
+                self.checkCodableResponse(response: response, expectedResponse: objectBook, expectedStatusCode: HTTPStatusCode.created)
                 guard let cookie = response.headers["Set-cookie"] else {
                     XCTFail("no set cookie recieved")
                     return
                 }
                 self.performRequest("get", path: "/session", expectation: expectation, headers: ["cookie": cookie[0], "Content-Type": "application/json"], callback: { response in
-                    self.checkCodableResponse(response: response, expectedResponse: [objectBook])
+                    self.checkCodableResponse(response: response, expectedResponseArray: [objectBook])
                     expectation.fulfill()
                 })
             })
@@ -75,7 +75,7 @@ class TestSessionsRoutes: KituraTest {
         performServerTest(asyncTasks: { expectation in
             // Login to create the session and set session.sessionTestKey to be sessionTestValue
             self.performRequest("get", path: "/rawsession", expectation: expectation, callback: { response in
-                self.checkCodableResponse(response: response, expectedResponse: emptyBooks)
+                self.checkCodableResponse(response: response, expectedResponseArray: emptyBooks)
                 expectation.fulfill()
             })
         })
@@ -87,7 +87,7 @@ class TestSessionsRoutes: KituraTest {
         performServerTest(asyncTasks: { expectation in
             // Login to create the session and set session.sessionTestKey to be sessionTestValue
             self.performRequest("post", path: "/rawsession", body: jsonBook, expectation: expectation, headers: ["Content-Type": "application/json"], callback: { response in
-                self.checkCodableResponse(response: response, expectedBook: objectBook, expectedStatusCode: HTTPStatusCode.created)
+                self.checkCodableResponse(response: response, expectedResponse: objectBook, expectedStatusCode: HTTPStatusCode.created)
                 expectation.fulfill()
             })
         })
@@ -99,13 +99,13 @@ class TestSessionsRoutes: KituraTest {
         performServerTest(asyncTasks: { expectation in
             // Login to create the session and set session.sessionTestKey to be sessionTestValue
             self.performRequest("post", path: "/rawsession", body: jsonBook, expectation: expectation, headers: ["Content-Type": "application/json"], callback: { response in
-                self.checkCodableResponse(response: response, expectedBook: objectBook, expectedStatusCode: HTTPStatusCode.created)
+                self.checkCodableResponse(response: response, expectedResponse: objectBook, expectedStatusCode: HTTPStatusCode.created)
                 guard let cookie = response.headers["Set-cookie"] else {
                     XCTFail("no set cookie recieved")
                     return
                 }
                 self.performRequest("get", path: "/rawsession", expectation: expectation, headers: ["cookie": cookie[0], "Content-Type": "application/json"], callback: { response in
-                    self.checkCodableResponse(response: response, expectedResponse: [objectBook])
+                    self.checkCodableResponse(response: response, expectedResponseArray: [objectBook])
                     expectation.fulfill()
                 })
             })
