@@ -8,7 +8,7 @@
         $('#postButton').click(function(){
             $.post("/hello",
             {
-              name: "Default"
+              name: "JSONPost"
             },
             function(data,status){
                 alert("Data: " + data + "\nStatus: " + status);
@@ -21,7 +21,7 @@
               url: "/hello",
               type: 'PUT',
               data: {
-                name: "Default"
+                name: "JSONPut"
               },
               success: function(data,status){
                   alert("Data: " + data + "\nStatus: " + status);
