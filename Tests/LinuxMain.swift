@@ -22,5 +22,4 @@ XCTMain([
            testCase(KituraSampleTests.allTests),
            testCase(TestHelloRoutes.allTests),
            testCase(TestCodableRoutes.allTests),
-           testCase(TestAuthenticationRoutes.allTests),
        ])

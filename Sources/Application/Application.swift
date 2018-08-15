@@ -48,8 +48,6 @@ public class App {
         initializeMarkdownRoutes(app: self)
         initializeErrorRoutes(app: self)
         initializeCodableRoutes(app: self)
-        initializeAuthenticationRoutes(app: self)
-        initializeSessionsRoutes(app: self)
         initializeHealthRoutes(app: self)
         initializeStaticFileServers(app: self)
         initializeNotFoundRoute(app: self)
