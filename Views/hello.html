@@ -101,41 +101,38 @@
  <body>
      <p>
          This page will send HTTP requests to the "/hello" route
-         of the Kitura sample server. The server will then process the
-         incoming request to return or change the global "name" variable.
-         This demonstrates Raw routing in Kitura.
+         of the Kitura sample server.<br> The server will then process the
+         incoming request to return or change the global "name" variable.<br>
+         This is a demonstration of Raw routing in Kitura.
       </p>
-      <br>
      <ul><li>
-         <p>Send an HTTP GET request to &quot;/hello&quot; to ask for &quot;name&quot;.
-         If no name is set the server will default to &quot;World&quot;.
-        </p>
+         <p>Send an HTTP GET request to &quot;/hello&quot; to receive a greeting</p>
          <input type="button" value="GET to &quot;/hello&quot;" id="getButton" >
          </button>
      </li></ul>
      <ul><li>
-         <p>Send a JSON encoded HTTP POST request to &quot;/hello&quot; to set the &quot;name&quot;.</p>
+         <p>Set the username for the greeting by sending a JSON-encoded HTTP POST request to &quot;/hello&quot;</p>
          <form action="" method="post" id="json_post_form">
              Name: <input type="text" name="name" required="required"><br>
              <input id="submitJSONPost" type="button" name="Submit" value="Submit">
          </form>
      </li></ul>
      <ul><li>
-         <p>Send a URL encoded HTTP POST request to &quot;/hello&quot; to set the &quot;name&quot;.</p>
-         <form action="/hello" method="post" id="urlencoded_post_form" enctype="application/x-www-form-urlencoded">
+         <p>Set the username for the greeting by sending a URL-encoded HTTP POST request to &quot;/hello&quot;</p>
+         <form action="" method="post" id="urlencoded_post_form" enctype="application/x-www-form-urlencoded">
              Name: <input type="text" name="name" required="required"><br>
              <input id="submitURLEncodedPost" type="button" value="Submit">
          </form>
      </li></ul>
      <ul><li>
-         <p>Send a JSON encoded HTTP PUT request to &quot;/hello&quot; to set the &quot;name&quot;.</p>
+         <p>Set the username for the greeting by sending a JSON-encoded HTTP PUT request to &quot;/hello&quot;</p>
          <form action="" method="post" id="json_put_form">
              Name: <input type="text" name="name" required="required"><br>
              <input id="submitPut" type="button" name="Submit" value="Submit">
          </form>
      </li></ul>
      <ul><li>
-         <p>Send a HTTP DELETE request to &quot;/hello&quot; to set the &quot;name&quot; to nil.</p>
+         <p>Set the username to nil by sending a JSON-encoded HTTP DELETE request to &quot;/hello&quot;</p>
          <input type="button" value="DELETE to &quot;/hello&quot;" id="deleteButton" >
      </li></ul>
  </body>

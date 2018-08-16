@@ -16,6 +16,7 @@
 
 func initializeHelloRoutes(app: App) {
     
+    // This route accepts GET requests
     app.router.get("/hello") { _, response, next in
         let name = app.getName()
         try response.send("Hello \(name?.name ?? "World"), from Kitura!").end()
