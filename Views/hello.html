@@ -15,6 +15,21 @@
             });
         });
     });
+    function rawPost(theForm) {
+        $.ajax({
+            type: "POST",
+            url: "/hello",
+            data: JSON.stringify({ Name: theForm.name }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data, status){
+                alert("Data: " + data + "\nStatus: " + status);
+            },
+            failure: function(errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
     $(document).ready(function(){
         $('#putButton').click(function(){
             $.ajax({
@@ -54,6 +69,13 @@
      <ul><li>
          <p>Send a JSON encoded HTTP POST request to &quot;/hello&quot;</p>
          <input type="button" value="POST to &quot;/hello&quot;" id="postButton" >
+     </li></ul>
+     <ul><li>
+         <p>Send a JSON encoded HTTP POST request to &quot;/hello&quot;</p>
+         <form action="#" onsubmit="return validateFormOnSubmit(this);">
+             Name: <input type="text" name="name" required="required"><br>
+             <input type="submit" value="Submit">
+         </form>
      </li></ul>
      <ul><li>
          <p>Send a URL encoded HTTP POST request to &quot;/hello&quot;</p>
