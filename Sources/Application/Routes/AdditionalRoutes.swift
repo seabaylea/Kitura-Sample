@@ -17,7 +17,7 @@
 import Kitura
 import LoggerAPI
 
-func initializeAdvancedRoutes(app: App) {
+func initializeAdditionalRoutes(app: App) {
     
     // Uses multiple handler blocks
     app.router.get("/multi", handler: { request, response, next in
