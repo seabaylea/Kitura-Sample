@@ -25,14 +25,14 @@ func initializeHelloRoutes(app: App) {
     app.router.post("/hello") {request, response, next in
         let name = try request.read(as: Name.self)
         app.setName(name)
-        try response.send("Got a POST request").end()
+        try response.send(name).end()
     }
 
     // This route accepts PUT requests
     app.router.put("/hello") {request, response, next in
         let name = try request.read(as: Name.self)
         app.setName(name)
-        try response.send("Got a PUT request").end()
+        try response.send(name).end()
     }
 
     // This route accepts DELETE requests
@@ -42,6 +42,10 @@ func initializeHelloRoutes(app: App) {
     }
 }
 
+// The 'name' variable is a shared across the server.
+// Since requests are handled asynchronously, if two threads try to write to
+// 'name' at the same time the system with crash. To solve this we are using
+// a semaphore to allow only a single thread to access 'name' at one time.
 extension App {
     func setName(_ name: Name?) {
         nameSemaphore.wait()
