@@ -15,18 +15,52 @@
  **/
 
 import Foundation
+import KituraSession
+import Credentials
 import CredentialsGoogle
 import CredentialsFacebook
 import KituraContracts
+import LoggerAPI
 
 func initializeTokenAuthRoutes(app: App) {
-    // Codable Google token Auth. This is only used from a Client side application.
-    app.router.get("/googletoken") { (user: GoogleTokenProfile, respondWith: (GoogleTokenProfile?, RequestError?) -> Void) in
+    
+    // Codable Google token authentication.
+    app.router.get("/typesafegoogletoken") { (user: GoogleTokenProfile, respondWith: (GoogleTokenProfile?, RequestError?) -> Void) in
+        Log.verbose("User \(user.name) authenticated with type-safe Google token authentication")
         respondWith(user, nil)
     }
     
-    // Codable Google token Auth. This is only used from a Client side application.
-    app.router.get("/facebooktoken") { (user: FacebookTokenProfile, respondWith: (FacebookTokenProfile?, RequestError?) -> Void) in
+    // Set this as your app id to only authenticate tokens from your application.
+    FacebookTokenProfile.appID = nil
+        
+    // Codable Google token authentication.
+    app.router.get("/typesafefacebooktoken") { (user: FacebookTokenProfile, respondWith: (FacebookTokenProfile?, RequestError?) -> Void) in
+        Log.verbose("User \(user.name) with id \(user.id) authenticated with type-safe Facebook token authentication")
         respondWith(user, nil)
+    }
+    
+    // Codable token authentication which accepts Google and Facebook.
+    app.router.get("/typesafemultitoken") { (user: MultiTokenAuth, respondWith: (MultiTokenAuth?, RequestError?) -> Void) in
+        Log.verbose("User \(user.name) with id \(user.id) authenticated with type-safe multi token authentication")
+        respondWith(user, nil)
+    }
+    
+    // Initialize credentials
+    let tokenCredentials = Credentials()
+    
+    // Initialize and register acceptable token authentication
+    tokenCredentials.register(plugin: CredentialsFacebookToken())
+    tokenCredentials.register(plugin: CredentialsGoogleToken())
+    app.router.get("/rawtokenauth", middleware: tokenCredentials)
+    
+    app.router.get("/rawtokenauth") { request, response, next in
+        guard let userProfile = request.userProfile else {
+            Log.verbose("Failed raw token authentication")
+            response.status(.unauthorized)
+            try response.end()
+            return
+        }
+        Log.verbose("User \(userProfile.displayName) with id \(userProfile.id) authenticated with Raw token authentication")
+        response.send("Hello \(userProfile.displayName)")
     }
 }

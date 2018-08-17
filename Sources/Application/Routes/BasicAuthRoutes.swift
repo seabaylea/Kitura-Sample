@@ -2,7 +2,7 @@ import KituraContracts
 import Credentials
 import CredentialsHTTP
 
-func initializeAuthenticationRoutes(app: App) {
+func initializeBasicAuthRoutes(app: App) {
     // Codable Authentication
     app.router.get("/basic") { (user: MyBasicAuth, respondWith: (MyBasicAuth?, RequestError?) -> Void) in
         print("authenticated \(user.id) using \(user.provider)")
