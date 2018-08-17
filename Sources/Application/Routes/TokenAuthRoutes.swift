@@ -45,6 +45,7 @@ func initializeTokenAuthRoutes(app: App) {
         respondWith(user, nil)
     }
     
+    // Oauth tokens in raw routes
     // Initialize credentials
     let tokenCredentials = Credentials()
     
