@@ -39,7 +39,7 @@ func initializeTokenAuthRoutes(app: App) {
         respondWith(user, nil)
     }
     
-    // Codable token authentication which accepts Google and Facebook.
+    // Codable token authentication which accepts Google and Facebook tokens.
     app.router.get("/typesafemultitoken") { (user: MultiTokenAuth, respondWith: (MultiTokenAuth?, RequestError?) -> Void) in
         Log.verbose("User \(user.name) with id \(user.id) authenticated with type-safe multi token authentication")
         respondWith(user, nil)
@@ -54,6 +54,7 @@ func initializeTokenAuthRoutes(app: App) {
     app.router.get("/rawtokenauth", middleware: tokenCredentials)
     
     app.router.get("/rawtokenauth") { request, response, next in
+        // If there is no userProfile they failed authentication
         guard let userProfile = request.userProfile else {
             Log.verbose("Failed raw token authentication")
             response.status(.unauthorized)
