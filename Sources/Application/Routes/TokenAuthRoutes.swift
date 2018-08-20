@@ -20,30 +20,22 @@ import Credentials
 import CredentialsGoogle
 import CredentialsFacebook
 import KituraContracts
+import Kitura
 import LoggerAPI
 
 func initializeTokenAuthRoutes(app: App) {
     
     // Codable Google token authentication.
-    app.router.get("/typesafegoogletoken") { (user: GoogleTokenProfile, respondWith: (GoogleTokenProfile?, RequestError?) -> Void) in
-        Log.verbose("User \(user.name) authenticated with type-safe Google token authentication")
-        respondWith(user, nil)
-    }
+    app.router.get("/typesafegoogletoken", handler: app.tsGoogleHandler)
     
     // Set this as your app id to only authenticate tokens from your application.
     FacebookTokenProfile.appID = nil
         
     // Codable Google token authentication.
-    app.router.get("/typesafefacebooktoken") { (user: FacebookTokenProfile, respondWith: (FacebookTokenProfile?, RequestError?) -> Void) in
-        Log.verbose("User \(user.name) with id \(user.id) authenticated with type-safe Facebook token authentication")
-        respondWith(user, nil)
-    }
+    app.router.get("/typesafefacebooktoken", handler: app.tsFacebookHandler)
     
     // Codable token authentication which accepts Google and Facebook tokens.
-    app.router.get("/typesafemultitoken") { (user: MultiTokenAuth, respondWith: (MultiTokenAuth?, RequestError?) -> Void) in
-        Log.verbose("User \(user.name) with id \(user.id) authenticated with type-safe multi token authentication")
-        respondWith(user, nil)
-    }
+    app.router.get("/typesafemultitoken", handler: app.tsMultiHandler)
     
     // Oauth tokens in raw routes
     // Initialize credentials
@@ -53,16 +45,34 @@ func initializeTokenAuthRoutes(app: App) {
     tokenCredentials.register(plugin: CredentialsFacebookToken())
     tokenCredentials.register(plugin: CredentialsGoogleToken())
     app.router.get("/rawtokenauth", middleware: tokenCredentials)
+    app.router.get("/rawtokenauth", handler: app.rawHandler)
+}
+
+extension App {
+    func tsGoogleHandler(user: GoogleTokenProfile, respondWith: (GoogleTokenProfile?, RequestError?) -> Void) {
+        Log.verbose("User \(user.name) authenticated with type-safe Google token authentication")
+        respondWith(user, nil)
+    }
     
-    app.router.get("/rawtokenauth") { request, response, next in
-        // If there is no userProfile they failed authentication
-        guard let userProfile = request.userProfile else {
-            Log.verbose("Failed raw token authentication")
-            response.status(.unauthorized)
-            try response.end()
-            return
-        }
-        Log.verbose("User \(userProfile.displayName) with id \(userProfile.id) authenticated with Raw token authentication")
-        response.send("Hello \(userProfile.displayName)")
+    func tsFacebookHandler(user: FacebookTokenProfile, respondWith: (FacebookTokenProfile?, RequestError?) -> Void) {
+        Log.verbose("User \(user.name) with id \(user.id) authenticated with type-safe Facebook token authentication")
+        respondWith(user, nil)
+    }
+    
+    func tsMultiHandler(user: MultiTokenAuth, respondWith: (MultiTokenAuth?, RequestError?) -> Void) {
+        Log.verbose("User \(user.name) with id \(user.id) authenticated with type-safe multi token authentication")
+        respondWith(user, nil)
+    }
+    
+    func rawHandler(request: RouterRequest, response: RouterResponse, next: () -> Void) throws -> Void {
+            // If there is no userProfile they failed authentication
+            guard let userProfile = request.userProfile else {
+                Log.verbose("Failed raw token authentication")
+                response.status(.unauthorized)
+                try response.end()
+                return
+            }
+            Log.verbose("User \(userProfile.displayName) with id \(userProfile.id) authenticated with Raw token authentication")
+            response.send("Hello \(userProfile.displayName)")
     }
 }
