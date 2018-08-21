@@ -31,10 +31,12 @@ let package = Package(
         .package(url: "https://github.com/IBM-Swift/Kitura-StencilTemplateEngine.git", from: "1.9.0"),
         .package(url: "https://github.com/IBM-Swift/Kitura-Markdown.git", from: "1.0.0"),
         .package(url: "https://github.com/IBM-Swift/Kitura-WebSocket.git", from: "2.0.0"),
+        .package(url: "https://github.com/IBM-Swift/Kitura-CredentialsGoogle.git", from: "2.2.0"),
+        .package(url: "https://github.com/IBM-Swift/Kitura-CredentialsFacebook.git", from: "2.2.0"),
     ],
     targets: [
         .target(name: "Kitura-Sample", dependencies: [ .target(name: "Application"), .target(name: "ChatService"), "Kitura" , "HeliumLogger"]),
-        .target(name: "Application", dependencies: [ "Kitura", "CloudEnvironment","SwiftMetrics","Health", "KituraOpenAPI", "KituraMarkdown", "KituraStencil"]),
+        .target(name: "Application", dependencies: [ "Kitura", "CloudEnvironment","SwiftMetrics","Health", "KituraOpenAPI", "KituraMarkdown", "KituraStencil", "CredentialsGoogle", "CredentialsFacebook"]),
         .target(name: "ChatService", dependencies: ["Kitura-WebSocket"]),
         .testTarget(name: "KituraSampleRouterTests" , dependencies: [.target(name: "Application"), "Kitura","HeliumLogger" ])
     ]

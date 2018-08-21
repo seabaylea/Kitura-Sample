@@ -49,6 +49,7 @@ public class App {
         initializeErrorRoutes(app: self)
         initializeCodableRoutes(app: self)
         initializeHealthRoutes(app: self)
+        initializeOauth2Routes(app: self)
         initializeStaticFileServers(app: self)
         initializeNotFoundRoute(app: self)
         KituraOpenAPI.addEndpoints(to: router)
