@@ -79,7 +79,7 @@ func initializeOauth2Routes(app: App) {
         guard let user = request.userProfile else {
             return try response.send("Not authorized to view this route").end()
         }
-        try response.send("hello \(user.displayName)").end()
+        try response.send("Hello \(user.displayName)").end()
     }
     
     // Route to log out from either Facebook or Google.
