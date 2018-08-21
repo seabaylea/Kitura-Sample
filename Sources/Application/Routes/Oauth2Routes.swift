@@ -26,13 +26,16 @@ func initializeOauth2Routes(app: App) {
     let session = Session(secret: "AuthSecret", cookie: [CookieParameter.name("Kitura-Auth-cookie")])
     app.router.all("/oauth2", middleware: session)
     
+    
+    
+    // Facebook Oauth Setup
     let oauthFBCredentials = Credentials()
-
     // Replace these values for your application from https://developers.facebook.com/apps/
-    let fbClientId = "<your app ID>"
-    let fbClientSecret = "<your app secret>"
+    let fbClientId = "<your Facebook app ID>"
+    let fbClientSecret = "<your Facebook app secret>"
     
     // Your app callback route which has credentials registered on it
+    // This must be added to your Facebook app authorized Callbacks
     let fbCallbackUrl = app.cloudEnv.url + "/oauth2/facebook/callback"
     
     let fbCredentials = CredentialsFacebook(clientId: fbClientId, clientSecret: fbClientSecret, callbackUrl: fbCallbackUrl, options: ["scope":"email", "fields": "id,first_name,last_name,name,picture,email"])
@@ -45,6 +48,32 @@ func initializeOauth2Routes(app: App) {
     // App callback route
     app.router.get("/oauth2/facebook/callback", handler: oauthFBCredentials.authenticate(credentialsType: fbCredentials.name))
     
+    
+    
+    // Google Oauth Setup
+    let oauthGoogleCredentials = Credentials()
+    // Replace these values for your application.
+    // To set up an application follow these instructions: https://support.google.com/cloud/answer/6158849?hl=en
+    let googleClientId = "<your Google app ID>"
+    let googleClientSecret = "<your Google app secret>"
+    
+    // Your app callback route which has credentials registered on it.
+    // This must be added to your Google app authorized Callbacks
+    let googleCallbackUrl = app.cloudEnv.url + "/oauth2/google/callback"
+    
+    let googleCredentials = CredentialsGoogle(clientId: googleClientId, clientSecret: googleClientSecret, callbackUrl: googleCallbackUrl)
+    oauthGoogleCredentials.options["failureRedirect"] = "/oauth2.html"
+    oauthGoogleCredentials.options["successRedirect"] = "/googleloggedin.html"
+    
+    oauthGoogleCredentials.register(plugin: googleCredentials)
+    // Login route
+    app.router.get("/oauth2/google", handler: oauthGoogleCredentials.authenticate(credentialsType: googleCredentials.name))
+    // App callback route
+    app.router.get("/oauth2/google/callback", handler: oauthGoogleCredentials.authenticate(credentialsType: googleCredentials.name))
+    
+    
+    
+    // Route which only allows access if the user has authenticated with either Facebook or Google
     app.router.get("/oauth2/protected") { request, response, next in
         // check user profile for successful login
         guard let user = request.userProfile else {
@@ -53,11 +82,13 @@ func initializeOauth2Routes(app: App) {
         try response.send("hello \(user.displayName)").end()
     }
     
+    // Route to log out from either Facebook or Google.
     app.router.get("/oauth2/logout") { request, response, next in
         // check user profile for successful login
         guard let user = request.userProfile else {
             return try response.send("You are not currently logged in").end()
         }
+        // This will log the user out regardless of whether they logged in with Facebook or Google.
         oauthFBCredentials.logOut(request: request)
         return try response.send("User: \(user.displayName) successfully logged out").end()
     }
