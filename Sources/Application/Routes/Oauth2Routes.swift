@@ -21,40 +21,44 @@ import KituraSession
 
 func initializeOauth2Routes(app: App) {
     
-    // Session is required to keep user logged in after authentication
+    // Session is required to keep the user logged in after authentication
+    // If a user is logged in with a redirecting authentication, all routes with this session will have a userProfile
     let session = Session(secret: "AuthSecret", cookie: [CookieParameter.name("Kitura-Auth-cookie")])
     app.router.all("/oauth2", middleware: session)
     
-    let oauthCredentials = Credentials()
+    let oauthFBCredentials = Credentials()
 
     // Replace these values for your application from https://developers.facebook.com/apps/
-    let fbClientId = "your facebook id"
-    let fbCallbackUrl = "http://localhost:8080/oauth2/facebook/callback"
-    let fbClientSecret = "your facebook secret"
+    let fbClientId = "<your app ID>"
+    let fbClientSecret = "<your app secret>"
+    
+    // Your app callback route which has credentials registered on it
+    let fbCallbackUrl = app.cloudEnv.url + "/oauth2/facebook/callback"
     
     let fbCredentials = CredentialsFacebook(clientId: fbClientId, clientSecret: fbClientSecret, callbackUrl: fbCallbackUrl, options: ["scope":"email", "fields": "id,first_name,last_name,name,picture,email"])
-    oauthCredentials.options["failureRedirect"] = "/oauth2.html"
-    oauthCredentials.options["successRedirect"] = "/oauth2/success"
+    oauthFBCredentials.options["failureRedirect"] = "/oauth2.html"
+    oauthFBCredentials.options["successRedirect"] = "/facebookloggedin.html"
 
-    oauthCredentials.register(plugin: fbCredentials)
-    app.router.get("/oauth2/facebook", handler: oauthCredentials.authenticate(credentialsType: fbCredentials.name))
-    app.router.get("/oauth2/facebook/callback", handler: oauthCredentials.authenticate(credentialsType: fbCredentials.name))
-
-    app.router.get("/oauth2/success") { request, response, next in
-        // check user profile for successful login
-        guard let user = request.userProfile else {
-            return try response.status(.unauthorized).end()
-        }
-        print("user.displayName \(user.displayName)")
-        try response.send("hello \(user.displayName)").end()
-    }
+    oauthFBCredentials.register(plugin: fbCredentials)
+    // Login route
+    app.router.get("/oauth2/facebook", handler: oauthFBCredentials.authenticate(credentialsType: fbCredentials.name))
+    // App callback route
+    app.router.get("/oauth2/facebook/callback", handler: oauthFBCredentials.authenticate(credentialsType: fbCredentials.name))
     
     app.router.get("/oauth2/protected") { request, response, next in
         // check user profile for successful login
         guard let user = request.userProfile else {
             return try response.send("Not authorized to view this route").end()
         }
-        print("user.displayName \(user.displayName)")
         try response.send("hello \(user.displayName)").end()
+    }
+    
+    app.router.get("/oauth2/logout") { request, response, next in
+        // check user profile for successful login
+        guard let user = request.userProfile else {
+            return try response.send("You are not currently logged in").end()
+        }
+        oauthFBCredentials.logOut(request: request)
+        return try response.send("User: \(user.displayName) successfully logged out").end()
     }
 }
