@@ -17,6 +17,7 @@
 import Credentials
 import CredentialsFacebook
 import CredentialsGoogle
+import IBMCloudAppID
 import KituraSession
 
 func initializeOauth2Routes(app: App) {
@@ -27,17 +28,44 @@ func initializeOauth2Routes(app: App) {
     app.router.all("/oauth2", middleware: session)
     
     
+    // AppID Oauth Setup
+    let kituraCredentials = Credentials()
+    
+    // replace these values with those from your APP-ID application: https://console.bluemix.net/docs/services/appid/index.html
+    let options = [
+        "clientId": "<your appid clientID>",
+        "secret": "<your appid secret>",
+        "tenantId": "<your appid tenantId>",
+        "oauthServerUrl": "<your appid oauthServerUrl>",
+        "redirectUri": app.cloudEnv.url + "/oauth2/appid/callback"
+    ]
+    if #available(OSX 10.12, *) {
+        let webappKituraCredentialsPlugin = WebAppKituraCredentialsPlugin(options: options)
+        kituraCredentials.register(plugin: webappKituraCredentialsPlugin)
+        app.router.get("/oauth2/appid",
+                       handler: kituraCredentials.authenticate(credentialsType: webappKituraCredentialsPlugin.name,
+                                                               successRedirect: "/appidloggedin.html",
+                                                               failureRedirect: "/oauth2.html"
+        ))
+        // Callback to finish the authorization process. Will retrieve access and identity tokens from App ID
+        app.router.get("/oauth2/appid/callback",
+                   handler: kituraCredentials.authenticate(credentialsType: webappKituraCredentialsPlugin.name,
+                                                           successRedirect: "/appidloggedin.html",
+                                                           failureRedirect: "/oauth2.html"
+        ))
+    }
+    
     
     // Facebook Oauth Setup
     let oauthFBCredentials = Credentials()
     // Replace these values for your application from https://developers.facebook.com/apps/
     let fbClientId = "<your Facebook app ID>"
     let fbClientSecret = "<your Facebook app secret>"
-    
+
     // Your app callback route which has credentials registered on it
     // This must be added to your Facebook app authorized Callbacks
     let fbCallbackUrl = app.cloudEnv.url + "/oauth2/facebook/callback"
-    
+
     let fbCredentials = CredentialsFacebook(clientId: fbClientId, clientSecret: fbClientSecret, callbackUrl: fbCallbackUrl, options: ["scope":"email", "fields": "id,first_name,last_name,name,picture,email"])
     oauthFBCredentials.options["failureRedirect"] = "/oauth2.html"
     oauthFBCredentials.options["successRedirect"] = "/facebookloggedin.html"
@@ -47,7 +75,7 @@ func initializeOauth2Routes(app: App) {
     app.router.get("/oauth2/facebook", handler: oauthFBCredentials.authenticate(credentialsType: fbCredentials.name))
     // App callback route
     app.router.get("/oauth2/facebook/callback", handler: oauthFBCredentials.authenticate(credentialsType: fbCredentials.name))
-    
+
     
     
     // Google Oauth Setup
@@ -73,7 +101,7 @@ func initializeOauth2Routes(app: App) {
     
     
     
-    // Route which only allows access if the user has authenticated with either Facebook or Google
+    // Route which only allows access if the user has authenticated with either AppID, Facebook or Google
     app.router.get("/oauth2/protected") { request, response, next in
         // check user profile for successful login
         guard let user = request.userProfile else {
@@ -82,14 +110,14 @@ func initializeOauth2Routes(app: App) {
         try response.send("Hello \(user.displayName)").end()
     }
     
-    // Route to log out from either Facebook or Google.
+    // Route to log out from either either AppID, Facebook or Google.
     app.router.get("/oauth2/logout") { request, response, next in
         // check user profile for successful login
         guard let user = request.userProfile else {
             return try response.send("You are not currently logged in").end()
         }
         // This will log the user out regardless of whether they logged in with Facebook or Google.
-        oauthFBCredentials.logOut(request: request)
+        oauthGoogleCredentials.logOut(request: request)
         return try response.send("User: \(user.displayName) successfully logged out").end()
     }
 }
