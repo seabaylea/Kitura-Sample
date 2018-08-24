@@ -17,8 +17,8 @@
 import Credentials
 import CredentialsFacebook
 import CredentialsGoogle
-import IBMCloudAppID
 import KituraSession
+//import IBMCloudAppID
 
 func initializeOauth2Routes(app: App) {
     
@@ -26,35 +26,7 @@ func initializeOauth2Routes(app: App) {
     // If a user is logged in with a redirecting authentication, all routes with this session will have a userProfile
     let session = Session(secret: "AuthSecret", cookie: [CookieParameter.name("Kitura-Auth-cookie")])
     app.router.all("/oauth2", middleware: session)
-    
-    
-    // AppID Oauth Setup
-    let kituraCredentials = Credentials()
-    
-    // replace these values with those from your APP-ID application: https://console.bluemix.net/docs/services/appid/index.html
-    let options = [
-        "clientId": "<your appid clientID>",
-        "secret": "<your appid secret>",
-        "tenantId": "<your appid tenantId>",
-        "oauthServerUrl": "<your appid oauthServerUrl>",
-        "redirectUri": app.cloudEnv.url + "/oauth2/appid/callback"
-    ]
-    if #available(OSX 10.12, *) {
-        let webappKituraCredentialsPlugin = WebAppKituraCredentialsPlugin(options: options)
-        kituraCredentials.register(plugin: webappKituraCredentialsPlugin)
-        app.router.get("/oauth2/appid",
-                       handler: kituraCredentials.authenticate(credentialsType: webappKituraCredentialsPlugin.name,
-                                                               successRedirect: "/appidloggedin.html",
-                                                               failureRedirect: "/oauth2.html"
-        ))
-        // Callback to finish the authorization process. Will retrieve access and identity tokens from App ID
-        app.router.get("/oauth2/appid/callback",
-                   handler: kituraCredentials.authenticate(credentialsType: webappKituraCredentialsPlugin.name,
-                                                           successRedirect: "/appidloggedin.html",
-                                                           failureRedirect: "/oauth2.html"
-        ))
-    }
-    
+
     
     // Facebook Oauth Setup
     let oauthFBCredentials = Credentials()
@@ -99,6 +71,41 @@ func initializeOauth2Routes(app: App) {
     // App callback route
     app.router.get("/oauth2/google/callback", handler: oauthGoogleCredentials.authenticate(credentialsType: googleCredentials.name))
     
+    
+    // AppID has been commented out since it requires special flags.
+    // To use it uncomment `import IBMCloudAppID`, the code below, and `appid-serversdk-swift` in `Package.swift`
+    // Use `swift build -Xlinker -L/usr/local/opt/openssl/lib -Xcc -I/usr/local/opt/openssl/include` to build
+    // Use `swift package generate-xcodeproj --xcconfig-overrides openssl.xcconfig` to generate the Xcode project
+    
+    // AppID Oauth Setup
+    
+    /*
+    let kituraCredentials = Credentials()
+    
+    // replace these values with those from your APP-ID application: https://console.bluemix.net/docs/services/appid/index.html
+    let options = [
+        "clientId": "<your appid clientID>",
+        "secret": "<your appid secret>",
+        "tenantId": "<your appid tenantId>",
+        "oauthServerUrl": "<your appid oauthServerUrl>",
+        "redirectUri": app.cloudEnv.url + "/oauth2/appid/callback"
+    ]
+    if #available(OSX 10.12, *) {
+        let webappKituraCredentialsPlugin = WebAppKituraCredentialsPlugin(options: options)
+        kituraCredentials.register(plugin: webappKituraCredentialsPlugin)
+        app.router.get("/oauth2/appid",
+                       handler: kituraCredentials.authenticate(credentialsType: webappKituraCredentialsPlugin.name,
+                                                               successRedirect: "/appidloggedin.html",
+                                                               failureRedirect: "/oauth2.html"
+        ))
+        // Callback to finish the authorization process. Will retrieve access and identity tokens from App ID
+        app.router.get("/oauth2/appid/callback",
+                       handler: kituraCredentials.authenticate(credentialsType: webappKituraCredentialsPlugin.name,
+                                                               successRedirect: "/appidloggedin.html",
+                                                               failureRedirect: "/oauth2.html"
+        ))
+    }
+    */
     
     
     // Route which only allows access if the user has authenticated with either AppID, Facebook or Google
