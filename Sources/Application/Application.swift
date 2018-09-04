@@ -48,12 +48,13 @@ public class App {
         initializeMarkdownRoutes(app: self)
         initializeErrorRoutes(app: self)
         initializeCodableRoutes(app: self)
-        initializeAuthenticationRoutes(app: self)
+        initializeBasicAuthRoutes(app: self)
         initializeSessionsRoutes(app: self)
         initializeHealthRoutes(app: self)
         initializeStaticFileServers(app: self)
-        initializeNotFoundRoute(app: self)
         KituraOpenAPI.addEndpoints(to: router)
+        // The not found route must be last since it matches all requests.
+        initializeNotFoundRoute(app: self)
     }
     
     public func run() throws {

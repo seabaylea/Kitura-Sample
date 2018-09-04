@@ -12,9 +12,9 @@ func initializeSessionsRoutes(app: App) {
         respondWith(book, nil)
     }
     
-    app.router.get("/logout") { (session: MySession, respondWith: (Book?, RequestError?) -> Void) -> Void in
+    app.router.delete("/session") { (session: MySession, respondWith: (RequestError?) -> Void) -> Void in
         session.destroy()
-        respondWith(nil,nil)
+        respondWith(nil)
     }
     
     // Raw session
@@ -36,7 +36,6 @@ func initializeSessionsRoutes(app: App) {
             else { continue }
             books.append(newBook)
         }
-        // Work with your books from the session
         response.send(json: books)
         next()
     }
@@ -55,12 +54,12 @@ func initializeSessionsRoutes(app: App) {
         next()
     }
     
-    app.router.get("/rawlogout") { request, response, next in
+    app.router.delete("/rawsession") { request, response, next in
         guard let session = request.session else {
             return try response.status(.internalServerError).end()
         }
         session["books"] = nil
-        let _ = response.send(status: .OK)
+        let _ = response.send(status: .noContent)
         next()
     }
 }

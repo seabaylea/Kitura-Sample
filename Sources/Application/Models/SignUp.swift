@@ -14,19 +14,7 @@
  * limitations under the License.
  **/
 
-import CredentialsHTTP
-import Dispatch
-
-public struct MyBasicAuth: TypeSafeHTTPBasic {
-    public static let realm: String = "HTTP Basic authentication: Username = username, Password = password"
-    
-    public static func verifyPassword(username: String, password: String, callback: @escaping (MyBasicAuth?) -> Void) {
-        if UserPasswords.checkPassword(username: username, password: password) {
-            callback(MyBasicAuth(id: username))
-            return
-        }
-        callback(nil)
-    }
-    
-    public var id: String
+public struct SignUp: Codable {
+    let username: String
+    let password: String
 }
