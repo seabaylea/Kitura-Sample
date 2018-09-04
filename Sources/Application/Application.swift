@@ -43,7 +43,7 @@ public class App {
     func postInit() throws {
         // Endpoints
         initializeHelloRoutes(app: self)
-        initializeAdvancedRoutes(app: self)
+        initializeAdditionalRoutes(app: self)
         initializeStencilRoutes(app: self)
         initializeMarkdownRoutes(app: self)
         initializeErrorRoutes(app: self)

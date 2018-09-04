@@ -24,5 +24,4 @@ XCTMain([
            testCase(TestCodableRoutes.allTests),
            testCase(TestAuthenticationRoutes.allTests),
            testCase(TestSessionsRoutes.allTests),
-           
        ])
