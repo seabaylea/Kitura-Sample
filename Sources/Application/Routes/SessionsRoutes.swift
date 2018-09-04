@@ -12,6 +12,11 @@ func initializeSessionsRoutes(app: App) {
         respondWith(book, nil)
     }
     
+    app.router.get("/logout") { (session: MySession, respondWith: (Book?, RequestError?) -> Void) -> Void in
+        session.destroy()
+        respondWith(nil,nil)
+    }
+    
     // Raw session
     let session = Session(secret: "secret", cookie: [CookieParameter.name("Raw-cookie")])
     app.router.all(middleware: session)
@@ -47,6 +52,15 @@ func initializeSessionsRoutes(app: App) {
         session["books"] = bookData
         response.status(.created)
         response.send(inputBook)
+        next()
+    }
+    
+    app.router.get("/rawlogout") { request, response, next in
+        guard let session = request.session else {
+            return try response.status(.internalServerError).end()
+        }
+        session["books"] = nil
+        let _ = response.send(status: .OK)
         next()
     }
 }

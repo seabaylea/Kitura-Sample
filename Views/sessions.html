@@ -5,8 +5,13 @@
    <title>Sessions</title>
  </head>
  <body>
-     <p>What would you like to do?</p>
-     <ul><li>
+     <p>
+     This page will send HTTP requests to the "/session" and "/rawsession" route of the Kitura sample server.<br>
+     A session is created for each user and is persisted through cookies. You can test this using a private window.<br>
+     The server will process the incoming request to return or change an array "Books" that is stored within the user's session.<br>
+     <a href="https://github.com/IBM-Swift/Kitura-Sample/blob/master/Sources/Application/Routes/SessionsRoutes.swift" target="_blank">View the code</a>
+     </p>
+    <ul><li>
          <p>Send an HTTP GET request to &quot;/session&quot;</p>
          <button onclick="location.href='/session'" type="button">
          GET &quot;/session&quot;
@@ -22,6 +27,12 @@
          </form>
      </li></ul>
      <ul><li>
+         <p>Send an HTTP GET request to &quot;/logout&quot;</p>
+         <button onclick="location.href='/logout'" type="button">
+             Logout
+         </button>
+     </li></ul>
+     <ul><li>
          <p>Send an HTTP GET request to &quot;/rawsession&quot;</p>
          <button onclick="location.href='/rawsession'" type="button">
          GET &quot;/rawsession&quot;
@@ -35,6 +46,12 @@
              rating: <input type="number" name="rating" required="required" min="1" max="5"><br>
              <input type="submit" value="Submit">
          </form>
+     </li></ul>
+     <ul><li>
+         <p>Send an HTTP GET request to &quot;/rawlogout&quot;</p>
+         <button onclick="location.href='/rawlogout'" type="button">
+             Logout
+         </button>
      </li></ul>
  </body>
 </html>
