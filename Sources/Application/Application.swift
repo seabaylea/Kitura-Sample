@@ -33,7 +33,7 @@ public class App {
     let nameSemaphore = DispatchSemaphore(value: 1)
     var name: Name?
     let bookSemaphore = DispatchSemaphore(value: 1)
-    var bookStore: [Book] = [Book(name: "Sample", author: "zzz", rating: 5)!]
+    var bookStore: [Book] = [Book(name: "Sample", author: "zzz", rating: 5)]
     
     public init() throws {
         // Run the metrics initializer

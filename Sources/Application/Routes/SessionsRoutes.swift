@@ -1,3 +1,19 @@
+/**
+ * Copyright IBM Corporation 2018
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ **/
+
 import KituraContracts
 import KituraSession
 func initializeSessionsRoutes(app: App) {
@@ -31,9 +47,9 @@ func initializeSessionsRoutes(app: App) {
             guard let bookName = book["name"],
                   let bookAuthor = book["author"],
                   let ratingString = book["rating"],
-                  let bookRating = Int(ratingString),
-                  let newBook = Book(name: bookName, author: bookAuthor, rating: bookRating)
+                  let bookRating = Int(ratingString)
             else { continue }
+            let newBook = Book(name: bookName, author: bookAuthor, rating: bookRating)
             books.append(newBook)
         }
         response.send(json: books)
