@@ -12,6 +12,9 @@
              type: 'GET',
              success: function(data,status){
                  alert("Server response data: " + JSON.stringify(data) + "\nStatus: " + status);
+             },
+             error: function() {
+                 alert("Unauthorized");
              }
            });
        });
@@ -25,6 +28,9 @@
              type: 'GET',
              success: function(data,status){
                  alert("Server response data: " + JSON.stringify(data) + "\nStatus: " + status);
+             },
+             error: function() {
+                 alert("Unauthorized");
              }
            });
        });
