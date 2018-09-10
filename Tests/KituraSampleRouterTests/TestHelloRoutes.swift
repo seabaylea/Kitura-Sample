@@ -44,7 +44,11 @@ class TestHelloRoutes: KituraTest {
             self.performRequest("get", path: "/hello", expectation: expectation) { response in
                 self.checkResponse(response: response, expectedResponseText: "Hello World, from Kitura!")
                 self.performRequest("post", path: "/hello", body: "{\"name\" : \"John\"}", expectation: expectation) { response in
+<<<<<<< HEAD
                     self.checkResponse(response: response, expectedResponseText: "Got a POST request")
+=======
+                    self.checkResponse(response: response, expectedResponseText: "{\"name\":\"John\"}")
+>>>>>>> master
                     self.performRequest("get", path: "/hello", expectation: expectation) { response in
                         self.checkResponse(response: response, expectedResponseText: "Hello John, from Kitura!")
                         expectation.fulfill()
@@ -58,8 +62,13 @@ class TestHelloRoutes: KituraTest {
         performServerTest(asyncTasks: { expectation in
             self.performRequest("get", path: "/hello", expectation: expectation) { response in
                 self.checkResponse(response: response, expectedResponseText: "Hello World, from Kitura!")
+<<<<<<< HEAD
                 self.performRequest("put", path: "/hello", body: "{\"name\" : \"John\"}", expectation: expectation) { response in
                     self.checkResponse(response: response, expectedResponseText: "Got a PUT request")
+=======
+                self.performRequest("put", path: "/hello", body: "{\"name\":\"John\"}", expectation: expectation) { response in
+                    self.checkResponse(response: response, expectedResponseText: "{\"name\":\"John\"}")
+>>>>>>> master
                     self.performRequest("get", path: "/hello", expectation: expectation) { response in
                         self.checkResponse(response: response, expectedResponseText: "Hello John, from Kitura!")
                         expectation.fulfill()
@@ -88,20 +97,34 @@ class TestHelloRoutes: KituraTest {
         performServerTest(asyncTasks: { expectation in
             self.performRequest("get", path: "/hello", expectation: expectation) { response in
                 self.checkResponse(response: response, expectedResponseText: "Hello World, from Kitura!")
+<<<<<<< HEAD
                 self.performRequest("post", path: "/hello", body: "{\"name\" : \"John\"}", expectation: expectation) { response in
                     self.checkResponse(response: response, expectedResponseText: "Got a POST request")
                     self.performRequest("get", path: "/hello", expectation: expectation) { response in
                         self.checkResponse(response: response, expectedResponseText: "Hello John, from Kitura!")
                         self.performRequest("put", path: "/hello", body: "{\"name\" : \"Mary\"}", expectation: expectation) { response in
                             self.checkResponse(response: response, expectedResponseText: "Got a PUT request")
+=======
+                self.performRequest("post", path: "/hello", body: "{\"name\":\"John\"}", expectation: expectation) { response in
+                    self.checkResponse(response: response, expectedResponseText: "{\"name\":\"John\"}")
+                    self.performRequest("get", path: "/hello", expectation: expectation) { response in
+                        self.checkResponse(response: response, expectedResponseText: "Hello John, from Kitura!")
+                        self.performRequest("put", path: "/hello", body: "{\"name\":\"Mary\"}", expectation: expectation) { response in
+                            self.checkResponse(response: response, expectedResponseText: "{\"name\":\"Mary\"}")
+>>>>>>> master
                             self.performRequest("get", path: "/hello", expectation: expectation) { response in
                                 self.checkResponse(response: response, expectedResponseText: "Hello Mary, from Kitura!")
                                 self.performRequest("delete", path: "/hello", expectation: expectation) { response in
                                     self.checkResponse(response: response, expectedResponseText: "Got a DELETE request")
                                     self.performRequest("get", path: "/hello", expectation: expectation) { response in
                                         self.checkResponse(response: response, expectedResponseText: "Hello World, from Kitura!")
+<<<<<<< HEAD
                                         self.performRequest("post", path: "/hello", body: "{\"name\" : \"Bob\"}", expectation: expectation) { response in
                                             self.checkResponse(response: response, expectedResponseText: "Got a POST request")
+=======
+                                        self.performRequest("post", path: "/hello", body: "{\"name\":\"Bob\"}", expectation: expectation) { response in
+                                            self.checkResponse(response: response, expectedResponseText: "{\"name\":\"Bob\"}")
+>>>>>>> master
                                             self.performRequest("get", path: "/hello", expectation: expectation) { response in
                                                 self.checkResponse(response: response, expectedResponseText: "Hello Bob, from Kitura!")
                                                 expectation.fulfill()
@@ -121,20 +144,34 @@ class TestHelloRoutes: KituraTest {
         performServerTest(asyncTasks: { expectation in
             self.performRequest("get", path: "/hello", expectation: expectation) { response in
                 self.checkResponse(response: response, expectedResponseText: "Hello World, from Kitura!")
+<<<<<<< HEAD
                 self.performRequest("put", path: "/hello", body: "{\"name\" : \"John\"}", expectation: expectation) { response in
                     self.checkResponse(response: response, expectedResponseText: "Got a PUT request")
                     self.performRequest("get", path: "/hello", expectation: expectation) { response in
                         self.checkResponse(response: response, expectedResponseText: "Hello John, from Kitura!")
                         self.performRequest("post", path: "/hello", body: "{\"name\" : \"Mary\"}", expectation: expectation) { response in
                             self.checkResponse(response: response, expectedResponseText: "Got a POST request")
+=======
+                self.performRequest("put", path: "/hello", body: "{\"name\":\"John\"}", expectation: expectation) { response in
+                    self.checkResponse(response: response, expectedResponseText: "{\"name\":\"John\"}")
+                    self.performRequest("get", path: "/hello", expectation: expectation) { response in
+                        self.checkResponse(response: response, expectedResponseText: "Hello John, from Kitura!")
+                        self.performRequest("post", path: "/hello", body: "{\"name\":\"Mary\"}", expectation: expectation) { response in
+                            self.checkResponse(response: response, expectedResponseText: "{\"name\":\"Mary\"}")
+>>>>>>> master
                             self.performRequest("get", path: "/hello", expectation: expectation) { response in
                                 self.checkResponse(response: response, expectedResponseText: "Hello Mary, from Kitura!")
                                 self.performRequest("delete", path: "/hello", expectation: expectation) { response in
                                     self.checkResponse(response: response, expectedResponseText: "Got a DELETE request")
                                     self.performRequest("get", path: "/hello", expectation: expectation) { response in
                                         self.checkResponse(response: response, expectedResponseText: "Hello World, from Kitura!")
+<<<<<<< HEAD
                                         self.performRequest("put", path: "/hello", body: "{\"name\" : \"Bob\"}", expectation: expectation) { response in
                                             self.checkResponse(response: response, expectedResponseText: "Got a PUT request")
+=======
+                                        self.performRequest("put", path: "/hello", body: "{\"name\":\"Bob\"}", expectation: expectation) { response in
+                                            self.checkResponse(response: response, expectedResponseText: "{\"name\":\"Bob\"}")
+>>>>>>> master
                                             self.performRequest("get", path: "/hello", expectation: expectation) { response in
                                                 self.checkResponse(response: response, expectedResponseText: "Hello Bob, from Kitura!")
                                                 expectation.fulfill()

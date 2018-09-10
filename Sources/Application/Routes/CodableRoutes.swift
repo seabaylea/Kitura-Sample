@@ -55,6 +55,10 @@ extension App {
         return completion(nil)
     }
 
+    // The 'bookStore' dictionary is a shared across the server.
+    // Since requests are handled asynchronously, if two threads try to write to
+    // 'bookStore' at the same time the system with crash. To solve this we are using
+    // a semaphore to allow only a single thread to access 'bookStore' at one time.
     func getBooks() -> [Book] {
         bookSemaphore.wait()
         let safeBooks = bookStore
