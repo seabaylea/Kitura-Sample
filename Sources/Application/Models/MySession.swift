@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 /**
  * Copyright IBM Corporation 2018
  *
@@ -16,7 +15,6 @@
  * limitations under the License.
  **/
 
->>>>>>> master
 import KituraSession
 
 // Defines the session instance data
